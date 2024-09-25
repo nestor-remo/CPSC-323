@@ -3,15 +3,23 @@
 using namespace std;
 
 int main() {
-    string w = "abbbcaaa$";
+    cout << "Enter a string, followed by $: ";
+    string w;
+    cin >> w;
     int i = 0, col = 0, state;
     
+
+
+    // CFG: 
+    // S -> aA | bB | cC
+    // B -> bB | aC | +
+    // C -> aS | +
     int table[4][3] = {
         {0,1,2},
         {2,1,3},
-        {1,3,3},
-        {3,3,3}
-    };
+        {0,3,3},
+        {3,3,3} 
+    }; 
 
     while (i < w.size()) 
     {
