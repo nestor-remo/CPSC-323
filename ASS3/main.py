@@ -9,15 +9,18 @@ for line in file:
 
 file.close()
 
-print(res)
+print(f"Token        number identifier reserved_word")
 
 for token in res:
+    isNumber = "no"
+    isIdentifier = "no"
+    isReserved = "no"
     if token.lower() in reserved:
-        print(f"{token} is a reserved word")
+        isReserved = 'yes'
     elif token.isdigit():
-        print(f"{token} is a number")
-    elif token[0] == "_" or token[0].isalpha() and token[1:].isidentifier():
-        print(f"{token} is an identifier")    
-    else:
-        print(f"{token} is nothing")
-    
+       isNumber = 'yes'
+    elif token[0] == "_" or token[0].isalpha() and token[1:].isidentifier():   
+        isIdentifier = 'yes'
+        
+        
+    print(f" {token:11}{isNumber:^10}{isIdentifier:^10}{isReserved:^10}")
