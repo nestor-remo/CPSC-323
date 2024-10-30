@@ -2,5 +2,11 @@
     "python.REPL.enableREPLSmartSend": false,
     "cSpell.words": [
         "dearpygui"
-    ]
+    ],
+    "files.associations": {
+        "ostream": "cpp",
+        "iostream": "cpp",
+        "*.tcc": "cpp",
+        "string": "cpp"
+    }
 }
