@@ -4,6 +4,21 @@
 
 using namespace std;
 
+//determines the column number for the parsing table
+int getCol(char ch) {
+    switch (ch) {
+        case 'i': return 0;
+        case '+': return 1;
+        case '-': return 2;
+        case '*': return 3;
+        case '/': return 4;
+        case '(': return 5;
+        case ')': return 6;
+        case '$': return 7;
+        default: return -1;
+    }
+}
+
 int main() {
     cout << "Enter a string, followed by $: ";
     string w;
@@ -23,20 +38,6 @@ int main() {
         {"i", "", "", "", "", "(E)", "", ""}          // Row for F
     };
 
-    // Function to get column based on input symbol
-    auto getCol = [](char ch) {
-        switch (ch) {
-            case 'i': return 0;
-            case '+': return 1;
-            case '-': return 2;
-            case '*': return 3;
-            case '/': return 4;
-            case '(': return 5;
-            case ')': return 6;
-            case '$': return 7;
-            default: return -1;
-        }
-    };
 
     // Main parsing loop
     while (!parseStack.empty()) {

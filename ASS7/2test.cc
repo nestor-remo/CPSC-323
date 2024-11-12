@@ -4,6 +4,38 @@
 
 using namespace std;
 
+//determines the column number for the parsing table
+int getCol(char ch) {
+    switch (ch) {
+        case 'a': return 0;
+        case 'b': return 1;
+        case '+': return 2;
+        case '-': return 3;
+        case '*': return 4;
+        case '/': return 5;
+        case '(': return 6;
+        case ')': return 7;
+        case '=': return 8;
+        case '$': return 9;
+        default: return -1;
+    }
+}
+
+//determines the row number for the parsing table
+int getRow(char ch) {
+    switch (ch) {
+        case 'S': return 0;
+        case 'W': return 1;
+        case 'E': return 2;
+        case 'Q': return 3;
+        case 'T': return 4;
+        case 'R': return 5;
+        case 'F': return 6;
+        default: return -1;
+    }
+}
+
+
 int main() {
     cout << "Enter a string, followed by $: ";
     string w;
@@ -25,23 +57,6 @@ int main() {
         {"a", "b", "", "", "", "", "(E)", "", "", ""}  
     };
 
-    // Function to get column based on input symbol
-    auto getCol = [](char ch) {
-        switch (ch) {
-            case 'a': return 0;
-            case 'b': return 1;
-            case '+': return 2;
-            case '-': return 3;
-            case '*': return 4;
-            case '/': return 5;
-            case '(': return 6;
-            case ')': return 7;
-            case '=': return 8;
-            case '$': return 9;
-            default: return -1;
-        }
-    };
-
     // Main parsing loop
     while (!parseStack.empty()) {
         string top = parseStack.top();
@@ -49,7 +64,11 @@ int main() {
 
         // Display stack and input status
         cout << "Stack: ";
-        for (auto s = parseStack; !s.empty(); s.pop()) cout << s.top() << " ";
+        stack<string> tempStack = parseStack;
+        while (!tempStack.empty()) {
+            cout << tempStack.top() << " ";
+            tempStack.pop();
+        }
         cout << top << endl;
         cout << "Input: " << w.substr(i) << endl;
 
@@ -63,16 +82,10 @@ int main() {
         } 
         else {
             // Determine row and column for table lookup
-            int row = -1;
-            if (top == "S") row = 0;
-            else if (top == "W") row = 1;
-            else if (top == "E") row = 2;
-            else if (top == "Q") row = 3;
-            else if (top == "T") row = 4;
-            else if (top == "R") row = 5;
-            else if (top == "F") row = 6;
-
+            int row = getRow(top[0]);
             int col = getCol(w[i]);
+
+            // Check for invalid input
             if (row == -1 || col == -1 || table[row][col].empty()) {
                 cout << "Input is REJECTED" << endl;
                 return 0;
