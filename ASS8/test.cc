@@ -23,6 +23,26 @@ int getCol(char ch) {
     }
 }
 
+void printStack(stack<string> s) 
+{
+    stack<string> temp;
+    while (!s.empty()) 
+    {
+        temp.push(s.top());
+        s.pop();
+    }
+    while (!temp.empty()) 
+    {
+        cout << temp.top() << " ";
+        temp.pop();
+    }
+    cout << endl;
+}
+
+void printGoTo(string row, char col, string entry)
+{
+    cout << "Goto [" << row << ", " << col << "] = " << entry << endl;
+}
 
 int main()
 {
@@ -70,54 +90,76 @@ int main()
         {"8", "F->i"}
     };
 
-    while (!parseStack.empty()) 
+    // Main parsing loop
+    while (true) 
     {
         string top = parseStack.top();
 
+        // Display stack and input status
+        cout << "Stack: ";
+        printStack(parseStack);
+        parseStack.pop();
+        cout << "Input: " << w.substr(i) << endl;
+
         int row = stoi(top);
         int col = getCol(w[i]);
+        string entry = table[row][col];
+        
+        printGoTo(to_string(row), w[i], entry);
 
-        // Print the current state of the stack
-        cout << "Stack: ";
-        stack<string> tempStack = parseStack;
-        while (!tempStack.empty()) 
-        {
-            cout << tempStack.top();
-            tempStack.pop();
-        }
-        cout << endl;
-    
-
-        if (row == -1 || col == -1 || table[row][col] == "") 
+        // Check if the table entry is empty
+        if (row == -1 || col == -1 || entry == "") 
         {
             cout << "Not Accepted" << endl;
-            return 0;
+            break;
         }
+
 
 
         // Check if the table entry is a number entry
-        else if ( ){
+        else if (isdigit(entry[0]))
+        {
+            parseStack.push(to_string(row));
+            parseStack.push(to_string(col));
+            parseStack.push(entry);
 
+            // cout << "Row: " << row << " Col: " << col << " Entry: " << entry << endl;
         }
 
 
         // Check if the table entry is an accepted entry
-        else if (table[row][col] == "ACC") 
+        else if (entry == "ACC") 
         {
             cout << "Accepted" << endl;
-            return 0;
+            break;
         }
 
-        // Check if the table entry is an 'R' entry
-        else if (table[row][col][0] == 'S')
+        // Check if the table entry is an 'S' entry
+        else if (entry[0] == 'S')
         {
-            
+            string n = entry.substr(1);
+            parseStack.push(to_string(row));
+            parseStack.push(string(1, w[i]));
+            parseStack.push(n);
+            i++;
         }
         
-        // Check if the table entry is an 'S' entry
-        else if (table[row][col][0] == 'R') 
+        // Check if the table entry is an 'R' entry
+        else if (entry[0] == 'R') 
         {
-            i++;
+            parseStack.push(to_string(row));
+
+            printStack(parseStack);
+
+            string production = productions[string(1, entry[1])];
+            string rhs = production.substr(production.find("->") + 2); 
+            string lhs = production.substr(0, production.find("->"));
+
+            for (int x = 0; x < 2 * rhs.length(); x++) 
+            {
+                parseStack.pop();
+            }         
+
         }
         
     }
