@@ -98,6 +98,7 @@ int main()
         // Display stack and input status
         cout << "Stack: ";
         printStack(parseStack);
+        cout << "Pop: " << top << endl;
         parseStack.pop();
         cout << "Input: " << w.substr(i) << endl;
 
@@ -122,10 +123,7 @@ int main()
             parseStack.push(to_string(row));
             parseStack.push(to_string(col));
             parseStack.push(entry);
-
-            // cout << "Row: " << row << " Col: " << col << " Entry: " << entry << endl;
         }
-
 
         // Check if the table entry is an accepted entry
         else if (entry == "ACC") 
@@ -141,6 +139,8 @@ int main()
             parseStack.push(to_string(row));
             parseStack.push(string(1, w[i]));
             parseStack.push(n);
+
+            cout << "Push: " << row << "," << w[i] << "," << n << endl;
             i++;
         }
         
@@ -148,18 +148,35 @@ int main()
         else if (entry[0] == 'R') 
         {
             parseStack.push(to_string(row));
+            cout << "Push: " << row << endl;
 
+            cout << "Stack: ";
             printStack(parseStack);
 
             string production = productions[string(1, entry[1])];
+            cout << "Production #" << string(1, entry[1]) << ": " << production << endl;
+
             string rhs = production.substr(production.find("->") + 2); 
             string lhs = production.substr(0, production.find("->"));
 
             for (int x = 0; x < 2 * rhs.length(); x++) 
             {
                 parseStack.pop();
-            }         
 
+            }         
+            
+            cout << "Stack: ";
+            printStack(parseStack);
+
+
+            string newTop = parseStack.top();
+
+            int newEntry = stoi(table[stoi(newTop)][getCol(lhs[0])]);
+
+            parseStack.push(lhs);
+            parseStack.push(to_string(newEntry));
+
+            printGoTo(newTop, lhs[0], to_string(newEntry));
         }
         
     }
