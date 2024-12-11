@@ -109,6 +109,23 @@ def parseExpression() -> bool:
             #if the cell is empty, then the input string is invalid
             print(f"Go to : [{nonterminals[row]}, {terminals[col]}]= {parsingTable[row][col]}")
             if parsingTable[row][col] == '':
+                expected_tokens = []
+                for i in range(len(terminals)):
+                    if parsingTable[row][i] != '':
+                        expected_tokens.append(terminals[i])
+
+                # Check for specific missing punctuation tokens
+                missing_token = None
+                for tok in [';', ',', '.', '(', ')']:
+                    if tok in expected_tokens:
+                        missing_token = tok
+                        break
+
+                # Print appropriate error message
+                if missing_token:
+                    print(f"ERROR: \"{missing_token}\" is missing.")
+                else:
+                    print(f"ERROR: Unexpected token \"{token}\" after \"{popped}\". Expected one of: {', '.join(expected_tokens)}.")
                 return False
 
             #push the characters in the cell to the stack
